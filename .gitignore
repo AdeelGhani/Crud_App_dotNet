@@ -1,0 +1,29 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Others
+Crud_App_dotNetWebAPIApp/bin/
+Crud_App_dotNetWebAPIApp/obj/
+Crud_App_dotNetInfrastructure/bin/
+Crud_App_dotNetInfrastructure/obj/
+Crud_App_dotNetApplication/bin/
+Crud_App_dotNetApplication/obj/
+Crud_App_dotNetCore/bin/
+Crud_App_dotNetCore/obj/ 

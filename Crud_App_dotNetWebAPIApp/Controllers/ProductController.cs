@@ -1,0 +1,57 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Crud_App_dotNetApplication.DTOs.ProductDTOs;
+using Crud_App_dotNetApplication.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
+
+namespace Crud_App_dotNetWebAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class ProductController : ControllerBase
+    {
+        private readonly IMapper _mapper;
+        private readonly IProductService _productService;
+
+        public ProductController(IMapper mapper,IProductService productService)
+        {
+            this._mapper = mapper;
+            this._productService = productService;
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Customer")]
+        public async Task<IActionResult> GetProduct(int id)
+        {
+            var product = await _productService.GetProductByIdAsync(id);
+            if (product == null) return NotFound();
+            return Ok(product);
+        }
+        [HttpGet]
+        [Authorize(Roles = "Admin,Customer")]
+        public async Task<IActionResult> GetAllProduct([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _productService.GetAllProductsAsync(pageNumber, pageSize);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+        [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> PostProduct(AddProductDTO addProductDTO)
+        {
+            var product = await _productService.AddProductAsync(addProductDTO);
+            if (product == null) return NotFound();
+            return Ok(product);
+        }
+        [HttpPut("{id}")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> GetProduct(UpdateProductDTO updateProductDTO , int id)
+        {
+            var product = await _productService.UpdateProductAsync(id,updateProductDTO);
+            if (product == null) return NotFound();
+            return Ok(product);
+        }
+    }
+}
