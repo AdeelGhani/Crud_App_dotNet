@@ -11,7 +11,6 @@ namespace Crud_App_dotNetInfrastructure.Data
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,7 +24,7 @@ namespace Crud_App_dotNetInfrastructure.Data
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(c => c.Description)
+                entity.Property(c => c.CategoryDescription)
                     .HasMaxLength(500);
 
                 // Configure one-to-many relationship with Product
@@ -43,7 +42,7 @@ namespace Crud_App_dotNetInfrastructure.Data
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(p => p.Description)
+                entity.Property(p => p.ProductDescription)
                     .HasMaxLength(500);
 
                 // Configure index for CategoryId for better query performance
@@ -53,19 +52,7 @@ namespace Crud_App_dotNetInfrastructure.Data
                 //entity.HasQueryFilter(p => !p.IsDeleted);
             });
 
-            // User Configuration
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.Property(u => u.Username)
-                    .IsRequired()
-                    .HasMaxLength(100);
-                entity.Property(u => u.PasswordHash)
-                    .IsRequired();
-                entity.Property(u => u.Role)
-                    .IsRequired()
-                    .HasMaxLength(50);
-                entity.HasIndex(u => u.Username).IsUnique();
-            });
+         
         }
     }
 }

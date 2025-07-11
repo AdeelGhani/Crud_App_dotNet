@@ -56,7 +56,15 @@ namespace Crud_App_dotNetWebAPI.Controllers
             var result = await _categoryService.DeleteCategoryAsync(id);
             if (!result)
                 return BadRequest("Cannot delete category because it has products. Remove or reassign products first.");
-            return NoContent();
+            return Ok(new { message = "Category deleted successfully." });
+        }
+
+        [HttpGet("{id}/products")]
+        public async Task<IActionResult> GetAllProductsByCategoryId(int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _categoryService.GetAllProductsByCategoryIdAsync(id, pageNumber, pageSize);
+            if (result == null || result.Items == null || !result.Items.Any()) return NotFound();
+            return Ok(result);
         }
     }
 }

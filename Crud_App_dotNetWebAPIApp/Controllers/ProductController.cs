@@ -47,5 +47,12 @@ namespace Crud_App_dotNetWebAPI.Controllers
             if (product == null) return NotFound();
             return Ok(product);
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var result = await _productService.DeleteProductAsync(id);
+            if (!result) return NotFound();
+            return Ok(new { message = "Product deleted successfully." });
+        }
     }
 }

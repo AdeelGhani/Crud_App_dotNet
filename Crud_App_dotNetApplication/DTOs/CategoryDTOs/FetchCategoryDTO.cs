@@ -10,7 +10,7 @@ namespace Crud_App_dotNetApplication.DTOs.CategoryDTOs
     {
         public int Id { get; set; }
         public string CategoryName { get; set; }
-        public string Description { get; set; }
+        public string CategoryDescription { get; set; }
         public string ImageUrl { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }

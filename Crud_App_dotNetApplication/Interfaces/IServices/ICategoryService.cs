@@ -15,6 +15,7 @@ namespace Crud_App_dotNetApplication.Interfaces.IServices
         Task<FetchCategoryDTO> GetCategoryByIdAsync(int id);
         Task<FetchCategoryDTO> UpdateCategoryAsync(int id, UpdateCategoryDTO updateCategoryDTO);
         Task<bool> DeleteCategoryAsync(int id);
+        Task<PaginatedResult<FetchProductDTO>> GetAllProductsByCategoryIdAsync(int categoryId, int pageNumber, int pageSize);
     }
 }
   

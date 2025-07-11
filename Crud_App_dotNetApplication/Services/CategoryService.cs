@@ -72,5 +72,22 @@ namespace Crud_App_dotNetApplication.Services
                 throw;
             }
         }
+
+        public async Task<PaginatedResult<FetchProductDTO>> GetAllProductsByCategoryIdAsync(int categoryId, int pageNumber, int pageSize)
+        {
+            var products = await _unitOfWork.Products.Where(p => p.CategoryId == categoryId);
+            var totalCount = products.Count();
+            var pagedProducts = products
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            return new PaginatedResult<FetchProductDTO>
+            {
+                Items = _mapper.Map<List<FetchProductDTO>>(pagedProducts),
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+        }
     }
 }
