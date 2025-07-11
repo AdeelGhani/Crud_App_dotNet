@@ -10,6 +10,7 @@ using Crud_App_dotNetApplication.Interfaces.IRepository;
 using Crud_App_dotNetApplication.Interfaces.IServices;
 using Crud_App_dotNetApplication.Repositories;
 using Crud_App_dotNetCore.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Crud_App_dotNetApplication.Services
 {
@@ -45,7 +46,9 @@ namespace Crud_App_dotNetApplication.Services
 
         public async Task<PaginatedResult<FetchProductDTO>> GetAllProductsAsync(int pageNumber, int pageSize)
         {
+            // Fetch products with Category included
             var products = await _unitOfWork.Products.GetAllAsync();
+
             if (products == null)
             {
                 return null;
@@ -66,7 +69,9 @@ namespace Crud_App_dotNetApplication.Services
 
         public async Task<FetchProductDTO> GetProductByIdAsync(int id)
         {
+            // Fetch product with Category included
             var product = await _unitOfWork.Products.GetByIdAsync(id);
+
             return _mapper.Map<FetchProductDTO>(product);
         }
 

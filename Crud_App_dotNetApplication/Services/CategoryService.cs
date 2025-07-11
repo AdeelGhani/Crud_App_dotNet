@@ -57,8 +57,20 @@ namespace Crud_App_dotNetApplication.Services
             var category = await _unitOfWork.Categories.GetByIdAsync(id);
             if (category == null) return false;
             _unitOfWork.Categories.Remove(category);
-            await _unitOfWork.SaveChangesAsync();
-            return true;
+            try
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                // Check for foreign key constraint violation (SQL error 547)
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("REFERENCE constraint"))
+                {
+                    return false;
+                }
+                throw;
+            }
         }
     }
 }

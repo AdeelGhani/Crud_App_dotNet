@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Crud_App_dotNetApplication.DTOs.CategoryDTOs;
 using Crud_App_dotNetApplication.DTOs.ProductDTOs;
 using Crud_App_dotNetApplication.Interfaces.IServices;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Crud_App_dotNetWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -22,7 +20,6 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> PostCategory(AddCategoryDTO addCategoryDTO)
         {
             var category = await _categoryService.AddCategoryAsync(addCategoryDTO);
@@ -31,7 +28,6 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
@@ -39,7 +35,6 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
@@ -48,7 +43,6 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDTO updateCategoryDTO)
         {
             var updatedCategory = await _categoryService.UpdateCategoryAsync(id, updateCategoryDTO);
@@ -57,11 +51,11 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var result = await _categoryService.DeleteCategoryAsync(id);
-            if (!result) return NotFound();
+            if (!result)
+                return BadRequest("Cannot delete category because it has products. Remove or reassign products first.");
             return NoContent();
         }
     }

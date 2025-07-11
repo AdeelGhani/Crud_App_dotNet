@@ -15,7 +15,9 @@ namespace Crud_App_dotNetApplication.Mapping
         public MappinProfiles()
         {
             CreateMap<Product, FetchProductDTO>()
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+                
             CreateMap<AddProductDTO, Product>()
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.ProductDescription))
                 .ForMember(dest => dest.CategoryId,opt => opt.MapFrom(src=>src.CategoryId))
