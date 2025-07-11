@@ -76,8 +76,8 @@ namespace Crud_App_dotNetApplication.Services
         public async Task<PaginatedResult<FetchProductDTO>> GetAllProductsByCategoryIdAsync(int categoryId, int pageNumber, int pageSize)
         {
             var products = await _unitOfWork.Products.Where(p => p.CategoryId == categoryId);
-            var totalCount = products.Count();
-            var pagedProducts = products
+            var totalCount = products?.Count() ?? 0;
+            var pagedProducts = (products ?? new List<Product>())
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();

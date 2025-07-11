@@ -22,8 +22,10 @@ namespace Crud_App_dotNetWebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostCategory(AddCategoryDTO addCategoryDTO)
         {
+            if (addCategoryDTO == null)
+                return BadRequest(new { message = "Category data is required." });
             var category = await _categoryService.AddCategoryAsync(addCategoryDTO);
-            if (category == null) return NotFound();
+            if (category == null) return BadRequest(new { message = "Failed to create category." });
             return Ok(category);
         }
 
@@ -31,22 +33,28 @@ namespace Crud_App_dotNetWebAPI.Controllers
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
+            if (categories == null || !categories.Any())
+                return NotFound(new { message = "No categories found." });
             return Ok(categories);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
+            if (id <= 0)
+                return BadRequest(new { message = "Invalid category ID." });
             var category = await _categoryService.GetCategoryByIdAsync(id);
-            if (category == null) return NotFound();
+            if (category == null) return NotFound(new { message = "Category not found." });
             return Ok(category);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDTO updateCategoryDTO)
         {
+            if (updateCategoryDTO == null)
+                return BadRequest(new { message = "Update data is required." });
             var updatedCategory = await _categoryService.UpdateCategoryAsync(id, updateCategoryDTO);
-            if (updatedCategory == null) return NotFound();
+            if (updatedCategory == null) return NotFound(new { message = "Category not found or update failed." });
             return Ok(updatedCategory);
         }
 
@@ -55,15 +63,18 @@ namespace Crud_App_dotNetWebAPI.Controllers
         {
             var result = await _categoryService.DeleteCategoryAsync(id);
             if (!result)
-                return BadRequest("Cannot delete category because it has products. Remove or reassign products first.");
+                return BadRequest(new { message = "Cannot delete category because it has products. Remove or reassign products first." });
             return Ok(new { message = "Category deleted successfully." });
         }
 
         [HttpGet("{id}/products")]
         public async Task<IActionResult> GetAllProductsByCategoryId(int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
+            if (id <= 0)
+                return BadRequest(new { message = "Invalid category ID." });
             var result = await _categoryService.GetAllProductsByCategoryIdAsync(id, pageNumber, pageSize);
-            if (result == null || result.Items == null || !result.Items.Any()) return NotFound();
+            if (result == null || result.Items == null)
+                return NotFound(new { message = "No products found for this category." });
             return Ok(result);
         }
     }
