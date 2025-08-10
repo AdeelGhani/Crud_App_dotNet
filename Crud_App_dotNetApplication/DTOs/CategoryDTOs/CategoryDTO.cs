@@ -5,17 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crud_App_dotNetCore.Entities
+namespace Crud_App_dotNetApplication.DTOs.CategoryDTOs
 {
-    public class Category : BaseEntity
+    public class CategoryDTO
     {
+        public int? Id { get; set; }
         [Required]
         public string CategoryName { get; set; } = string.Empty;
-        public string CategoryDescription { get; set; } = string.Empty;
-        //public string? ImageUrl { get; set; }
+        public string? CategoryDescription { get; set; }
         public bool IsActive { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }

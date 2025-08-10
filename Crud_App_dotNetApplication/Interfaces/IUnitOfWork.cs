@@ -8,12 +8,12 @@ using Crud_App_dotNetCore.Entities;
 
 namespace Crud_App_dotNetApplication.Interfaces
 {
-    public interface IUnitOfWork 
+    public interface IUnitOfWork
     {
         IGenericRepository<Product> Products { get; }
         IGenericRepository<Category> Categories { get; }
-
-
+        IGenericRepository<Brand> Brands { get; }
+        IGenericRepository<User> Users { get; }
         Task<int> SaveChangesAsync();
     }
 }

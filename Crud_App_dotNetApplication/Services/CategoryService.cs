@@ -17,39 +17,54 @@ namespace Crud_App_dotNetApplication.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryService(IMapper mapper ,IUnitOfWork unitOfWork)
+        public CategoryService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             this._mapper = mapper;
             this._unitOfWork = unitOfWork;
         }
-        public async Task<FetchCategoryDTO> AddCategoryAsync(AddCategoryDTO CategoryDto)
+        public async Task<CategoryDTO> AddCategoryAsync(CategoryDTO CategoryDto)
         {
             var category = _mapper.Map<Category>(CategoryDto);
+
+            category.CreatedDate = DateTime.Now;
+            category.UpdatedDate = DateTime.Now;
+
             await _unitOfWork.Categories.AddAsync(category);
             await _unitOfWork.SaveChangesAsync();
-            return _mapper.Map<FetchCategoryDTO>(category);
+            return _mapper.Map<CategoryDTO>(category);
         }
 
-        public async Task<IEnumerable<FetchCategoryDTO>> GetAllCategoriesAsync()
+        public async Task<IEnumerable<CategoryDTO>> GetAllCategoriesAsync()
         {
             var categories = await _unitOfWork.Categories.GetAllAsync();
-            return _mapper.Map<IEnumerable<FetchCategoryDTO>>(categories);
+            return _mapper.Map<IEnumerable<CategoryDTO>>(categories);
         }
 
-        public async Task<FetchCategoryDTO> GetCategoryByIdAsync(int id)
+        public async Task<CategoryDTO> GetCategoryByIdAsync(int id)
         {
             var category = await _unitOfWork.Categories.GetByIdAsync(id);
-            return category == null ? null : _mapper.Map<FetchCategoryDTO>(category);
+            if (category == null)
+            {
+                throw new Exception("Category Not Found!!!");
+            }
+            return _mapper.Map<CategoryDTO>(category);
         }
 
-        public async Task<FetchCategoryDTO> UpdateCategoryAsync(int id, UpdateCategoryDTO updateCategoryDTO)
+        public async Task<CategoryDTO> UpdateCategoryAsync(int id, CategoryDTO updateCategoryDTO)
         {
             var category = await _unitOfWork.Categories.GetByIdAsync(id);
-            if (category == null) return null;
-            _mapper.Map(updateCategoryDTO, category);
+            if (category == null)
+            {
+                throw new Exception("Category Not Found!!!");
+            }
+            category.CategoryName = updateCategoryDTO.CategoryName;
+            category.CategoryDescription = updateCategoryDTO.CategoryDescription ?? "";
+            category.IsActive = updateCategoryDTO.IsActive;
+            category.UpdatedDate = DateTime.Now;
+            //_mapper.Map(updateCategoryDTO, category);
             _unitOfWork.Categories.Update(category);
             await _unitOfWork.SaveChangesAsync();
-            return _mapper.Map<FetchCategoryDTO>(category);
+            return _mapper.Map<CategoryDTO>(category);
         }
 
         public async Task<bool> DeleteCategoryAsync(int id)

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Crud_App_dotNetApplication.DTOs.ProductDTOs;
 using Crud_App_dotNetApplication.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Crud_App_dotNetWebAPI.Controllers
 {
@@ -13,13 +14,14 @@ namespace Crud_App_dotNetWebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IProductService _productService;
 
-        public ProductController(IMapper mapper,IProductService productService)
+        public ProductController(IMapper mapper, IProductService productService)
         {
             this._mapper = mapper;
             this._productService = productService;
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetProduct(int id)
         {
             if (id <= 0)
@@ -29,6 +31,7 @@ namespace Crud_App_dotNetWebAPI.Controllers
             return Ok(product);
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllProduct([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var result = await _productService.GetAllProductsAsync(pageNumber, pageSize);
@@ -37,16 +40,22 @@ namespace Crud_App_dotNetWebAPI.Controllers
             return Ok(result);
         }
         [HttpPost]
-        public async Task<IActionResult> PostProduct(AddProductDTO addProductDTO)
+        [Authorize(Policy = "RequireManager")]
+        public async Task<IActionResult> PostProduct(FetchProductDTO addProductDTO)
         {
             if (addProductDTO == null)
                 return BadRequest(new { message = "Product data is required." });
             var product = await _productService.AddProductAsync(addProductDTO);
+            //if (product.ProductName == addProductDTO.ProductName)
+            //{
+            //    return BadRequest(new { message = "Duplicate Name Cannot Exist!!!" });
+            //}
             if (product == null) return BadRequest(new { message = "Failed to create product." });
             return Ok(product);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> GetProduct(UpdateProductDTO updateProductDTO , int id)
+        [Authorize(Policy = "RequireManager")]
+        public async Task<IActionResult> GetProduct(FetchProductDTO updateProductDTO , int id)
         {
             if (updateProductDTO == null)
                 return BadRequest(new { message = "Update data is required." });
@@ -55,6 +64,7 @@ namespace Crud_App_dotNetWebAPI.Controllers
             return Ok(product);
         }
         [HttpDelete("{id}")]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var result = await _productService.DeleteProductAsync(id);

@@ -11,6 +11,9 @@ namespace Crud_App_dotNetInfrastructure.Data
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<User> Users { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,7 +40,6 @@ namespace Crud_App_dotNetInfrastructure.Data
             // Product Configuration
             modelBuilder.Entity<Product>(entity =>
             {
-                // Configure properties
                 entity.Property(p => p.ProductName)
                     .IsRequired()
                     .HasMaxLength(100);
@@ -45,14 +47,44 @@ namespace Crud_App_dotNetInfrastructure.Data
                 entity.Property(p => p.ProductDescription)
                     .HasMaxLength(500);
 
-                // Configure index for CategoryId for better query performance
                 entity.HasIndex(p => p.CategoryId);
+                entity.HasIndex(p => p.BrandId);
 
                 // Configure soft delete query filter
                 //entity.HasQueryFilter(p => !p.IsDeleted);
             });
+            modelBuilder.Entity<Brand>(entity =>
+            {
+                entity.Property(b => b.BrandName)
+                      .IsRequired()
+                      .HasMaxLength(100);
 
-         
+                entity.Property(b => b.Discription)
+                      .HasMaxLength(500);
+
+            });
+            modelBuilder.Entity<Product>()
+                    .HasOne(p => p.Brand)
+                    .WithMany(b => b.Products)
+                    .HasForeignKey(p => p.BrandId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+            // User configuration
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(u => u.Username)
+                      .IsRequired()
+                      .HasMaxLength(100);
+                entity.HasIndex(u => u.Username)
+                      .IsUnique();
+
+                entity.Property(u => u.Role)
+                      .IsRequired()
+                      .HasMaxLength(50);
+
+                entity.Property(u => u.Email)
+                      .HasMaxLength(150);
+            });
         }
     }
 }

@@ -10,10 +10,10 @@ namespace Crud_App_dotNetApplication.Interfaces.IServices
 {
     public interface ICategoryService
     {
-        Task<FetchCategoryDTO> AddCategoryAsync(AddCategoryDTO CategoryDto);
-        Task<IEnumerable<FetchCategoryDTO>> GetAllCategoriesAsync();
-        Task<FetchCategoryDTO> GetCategoryByIdAsync(int id);
-        Task<FetchCategoryDTO> UpdateCategoryAsync(int id, UpdateCategoryDTO updateCategoryDTO);
+        Task<CategoryDTO> AddCategoryAsync(CategoryDTO CategoryDto);
+        Task<IEnumerable<CategoryDTO>> GetAllCategoriesAsync();
+        Task<CategoryDTO> GetCategoryByIdAsync(int id);
+        Task<CategoryDTO> UpdateCategoryAsync(int id, CategoryDTO updateCategoryDTO);
         Task<bool> DeleteCategoryAsync(int id);
         Task<PaginatedResult<FetchProductDTO>> GetAllProductsByCategoryIdAsync(int categoryId, int pageNumber, int pageSize);
     }

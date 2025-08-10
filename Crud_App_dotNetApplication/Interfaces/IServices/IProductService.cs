@@ -12,8 +12,8 @@ namespace Crud_App_dotNetApplication.Interfaces.IServices
     {
         Task<FetchProductDTO> GetProductByIdAsync(int id);
         Task<PaginatedResult<FetchProductDTO>> GetAllProductsAsync(int pageNumber, int pageSize);
-        Task<FetchProductDTO> AddProductAsync(AddProductDTO productDto);
-        Task<FetchProductDTO> UpdateProductAsync(int id, UpdateProductDTO productDto);
+        Task<FetchProductDTO> AddProductAsync(FetchProductDTO productDto);
+        Task<FetchProductDTO> UpdateProductAsync(int id, FetchProductDTO productDto);
         Task<bool> DeleteProductAsync(int id);
     }
 }

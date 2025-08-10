@@ -20,13 +20,17 @@ namespace Crud_App_dotNetApplication.Services
 
         private IGenericRepository<Category> _category;
         private IGenericRepository<Product> _product;
+        //this is Brand Field
+        private IGenericRepository<Brand> _brand;
+        private IGenericRepository<User> _user;
         public UnitOfWork(ApplicationDbContext context)
         {
             this._context = context;
         }
         public IGenericRepository<Product> Products => _product ??= new GenericRepository<Product>(_context);
         public IGenericRepository<Category> Categories => _category ??= new GenericRepository<Category>(_context);
-
+        public IGenericRepository<Brand> Brands => _brand ??= new GenericRepository<Brand>(_context);
+        public IGenericRepository<User> Users => _user ??= new GenericRepository<User>(_context);
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

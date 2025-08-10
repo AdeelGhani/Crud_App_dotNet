@@ -4,48 +4,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Crud_App_dotNetApplication.DTOs.BrandDTOs;
 using Crud_App_dotNetApplication.DTOs.CategoryDTOs;
 using Crud_App_dotNetApplication.DTOs.ProductDTOs;
 using Crud_App_dotNetCore.Entities;
 
 namespace Crud_App_dotNetApplication.Mapping
 {
-    public class MappinProfiles :Profile
+    public class MappinProfiles : Profile
     {
         public MappinProfiles()
         {
-            CreateMap<Product, FetchProductDTO>()
-                .ForMember(dest => dest.ProductDescription, opt => opt.MapFrom(src => src.ProductDescription))
-                .ForMember(dest => dest.ProductDescription, opt => opt.MapFrom(src => src.ProductDescription));
-                
-            CreateMap<AddProductDTO, Product>()
-                .ForMember(dest => dest.ProductDescription, opt => opt.MapFrom(src => src.ProductDescription))
-                .ForMember(dest => dest.CategoryId,opt => opt.MapFrom(src=>src.CategoryId))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                .ForMember(dest => dest.StockQuantity, opt => opt.MapFrom(src => src.StockQuantity))
-                .ForMember(dest => dest.SKU, opt => opt.MapFrom(src => src.SKU))
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
-                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
-            CreateMap<UpdateProductDTO, Product>()
-                .ForMember(dest => dest.ProductDescription, opt => opt.MapFrom(src => src.ProductDescription))
-                .ForMember(dest => dest.CategoryId,opt => opt.MapFrom(src=>src.CategoryId))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                .ForMember(dest => dest.StockQuantity, opt => opt.MapFrom(src => src.StockQuantity))
-                .ForMember(dest => dest.SKU, opt => opt.MapFrom(src => src.SKU))
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
-                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
+            CreateMap<CategoryDTO, Category>()
+                 .ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<Product, FetchProductDTO>();
+            //         .ForMember(dest => dest.CreatedDate, opt => opt.Ignore()) // Optional: preserve original value
+            //.ForMember(dest => dest.UpdatedDate, opt => opt.Ignore());
 
-            CreateMap<AddCategoryDTO, Category>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
-                .ForMember(dest => dest.CategoryDescription, opt => opt.MapFrom(src => src.CategoryDescription))
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
-                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
-            CreateMap<UpdateCategoryDTO, Category>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
-                .ForMember(dest => dest.CategoryDescription, opt => opt.MapFrom(src => src.CategoryDescription))
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
-                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
-            CreateMap<Category, FetchCategoryDTO>();
+            CreateMap<FetchProductDTO, Product>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<FetchProductDTO, Product>();
+
+            // Optional separate DTOs for creation/update
+            CreateMap<DTOs.ProductDTOs.AddProductDTO, Product>();
+            CreateMap<DTOs.ProductDTOs.UpdateProductDTO, Product>();
+
+            CreateMap<CategoryDTO, Category>();
+
+            CreateMap<CategoryDTO, Category>();
+
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<Brand, FetchBrandDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.BrandName))
+                .ForMember(dest => dest.Discription, opt => opt.MapFrom(src => src.Discription));
+            CreateMap<Brand, AddBrandDTO>();
+            //.ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.BrandName))
+            //.ForMember(dest => dest.Discription, opt => opt.MapFrom(src => src.Discription));
+            CreateMap<AddBrandDTO, Brand>();
+
+
+            CreateMap<UpdateBrandDTO, Brand>().ReverseMap();
+
+
         }
     }
 }

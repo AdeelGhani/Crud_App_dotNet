@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +10,8 @@ namespace Crud_App_dotNetApplication.DTOs.CategoryDTOs
     {
         public string CategoryName { get; set; }
         public string CategoryDescription { get; set; }
-        public string ImageUrl { get; set; }
         public bool IsActive { get; set; }
 
     }
 }
+*/

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Crud_App_dotNetApplication.DTOs.CategoryDTOs;
 using Crud_App_dotNetApplication.DTOs.ProductDTOs;
 using Crud_App_dotNetApplication.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Crud_App_dotNetWebAPI.Controllers
 {
@@ -20,7 +21,8 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostCategory(AddCategoryDTO addCategoryDTO)
+        [Authorize(Policy = "RequireManager")]
+        public async Task<IActionResult> PostCategory(CategoryDTO addCategoryDTO)
         {
             if (addCategoryDTO == null)
                 return BadRequest(new { message = "Category data is required." });
@@ -30,6 +32,7 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
@@ -39,6 +42,7 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetCategoryById(int id)
         {
             if (id <= 0)
@@ -49,7 +53,8 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDTO updateCategoryDTO)
+        [Authorize(Policy = "RequireManager")]
+        public async Task<IActionResult> UpdateCategory(int id, CategoryDTO updateCategoryDTO)
         {
             if (updateCategoryDTO == null)
                 return BadRequest(new { message = "Update data is required." });
@@ -59,6 +64,7 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var result = await _categoryService.DeleteCategoryAsync(id);
@@ -68,6 +74,7 @@ namespace Crud_App_dotNetWebAPI.Controllers
         }
 
         [HttpGet("{id}/products")]
+        [Authorize]
         public async Task<IActionResult> GetAllProductsByCategoryId(int id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             if (id <= 0)

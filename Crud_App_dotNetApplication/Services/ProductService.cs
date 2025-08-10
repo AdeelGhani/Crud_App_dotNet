@@ -11,6 +11,7 @@ using Crud_App_dotNetApplication.Interfaces.IServices;
 using Crud_App_dotNetApplication.Repositories;
 using Crud_App_dotNetCore.Entities;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Formula.Functions;
 
 namespace Crud_App_dotNetApplication.Services
 {
@@ -19,14 +20,15 @@ namespace Crud_App_dotNetApplication.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductService(IUnitOfWork unitOfWork,IMapper mapper)
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this._unitOfWork = unitOfWork;
             this._mapper = mapper;
         }
-        public async Task<FetchProductDTO> AddProductAsync(AddProductDTO productDto)
+        public async Task<FetchProductDTO> AddProductAsync(FetchProductDTO productDto)
         {
             var product = _mapper.Map<Product>(productDto);
+            
             product.UpdatedDate = DateTime.Now;
             product.CreatedDate = DateTime.Now;
             await _unitOfWork.Products.AddAsync(product);
@@ -51,7 +53,7 @@ namespace Crud_App_dotNetApplication.Services
 
             if (products == null)
             {
-                return null;
+                throw new Exception("Category Not Found!!!");
             }
             var totalCount = products.Count();
             var pagedProducts = products
@@ -75,12 +77,23 @@ namespace Crud_App_dotNetApplication.Services
             return _mapper.Map<FetchProductDTO>(product);
         }
 
-        public async Task<FetchProductDTO> UpdateProductAsync(int id, UpdateProductDTO productDto)
+        public async Task<FetchProductDTO> UpdateProductAsync(int id, FetchProductDTO productDto)
         {
             var existingProduct = await _unitOfWork.Products.GetByIdAsync(id);
-            if (existingProduct == null) return null;
+            if (existingProduct == null)
+            {
+                throw new Exception("Category Not Found!!!");
+            }
+            existingProduct.ProductName = productDto.ProductName;
+            existingProduct.ProductDescription = productDto.ProductDescription ?? "";
+            existingProduct.Price = productDto.Price;
+            existingProduct.StockQuantity = productDto.StockQuantity;
+            existingProduct.IsActive = productDto.IsActive;
 
-            _mapper.Map(productDto, existingProduct);
+            existingProduct.UpdatedDate = DateTime.Now;
+            existingProduct.CreatedDate = DateTime.Now;
+
+            //_mapper.Map(productDto, existingProduct);
             _unitOfWork.Products.Update(existingProduct);
             await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<FetchProductDTO>(existingProduct);
