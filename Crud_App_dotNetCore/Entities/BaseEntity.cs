@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Crud_App_dotNetCore.Entities
+﻿namespace Crud_App_dotNetCore.Entities
 {
     public abstract class BaseEntity
     {

@@ -9,9 +9,8 @@ namespace Crud_App_dotNetInfrastructure.Data
         {
         }
 
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Brand> Brands { get; set; }
+        public DbSet<JournalDetail> JournalDetails { get; set; }
+        public DbSet<Journal> Journals { get; set; }
         public DbSet<User> Users { get; set; }
 
 
@@ -19,55 +18,51 @@ namespace Crud_App_dotNetInfrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Journal>(entity =>
+            {
+                entity.Property(b => b.VoucherDate)
+                      .IsRequired();
+                entity.Property(b => b.VoucherType)
+                      .IsRequired()
+                      .HasMaxLength(2);
+                entity.Property(b => b.VoucherRef)
+                      .HasMaxLength(8);
+                entity.Property(b => b.Narration)
+                      .HasMaxLength(100);
+                entity.Property(b => b.StoreCode)
+                      .HasMaxLength(4);
+
+            });
+            modelBuilder.Entity<JournalDetail>()
+                    .HasOne(p => p.Journal)
+                    .WithMany(b => b.JournalDetails)
+                    .HasForeignKey(p => p.JId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
             // Category Configuration
-            modelBuilder.Entity<Category>(entity =>
+            modelBuilder.Entity<JournalDetail>(entity =>
             {
                 // Configure properties
-                entity.Property(c => c.CategoryName)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                entity.Property(c => c.Part)
+                    .IsRequired();
 
-                entity.Property(c => c.CategoryDescription)
-                    .HasMaxLength(500);
+                entity.Property(c => c.AccCode)
+                    .IsRequired()
+                    .HasMaxLength(7);
+                entity.Property(c => c.Debit)
+                    .HasColumnType("decimal(14,2)");
+                entity.Property(c => c.Credit)
+                    .HasColumnType("decimal(14,2)");
+                entity.Property(c => c.LineNarration)
+                    .IsRequired()   
+                    .HasMaxLength(150);
 
                 // Configure one-to-many relationship with Product
-                entity.HasMany(c => c.Products)
-                    .WithOne(p => p.Category)
-                    .HasForeignKey(p => p.CategoryId)
+                entity.HasOne(c => c.Journal)
+                    .WithMany(p => p.JournalDetails)
+                    .HasForeignKey(p => p.JId)
                     .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
             });
-
-            // Product Configuration
-            modelBuilder.Entity<Product>(entity =>
-            {
-                entity.Property(p => p.ProductName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(p => p.ProductDescription)
-                    .HasMaxLength(500);
-
-                entity.HasIndex(p => p.CategoryId);
-                entity.HasIndex(p => p.BrandId);
-
-                // Configure soft delete query filter
-                //entity.HasQueryFilter(p => !p.IsDeleted);
-            });
-            modelBuilder.Entity<Brand>(entity =>
-            {
-                entity.Property(b => b.BrandName)
-                      .IsRequired()
-                      .HasMaxLength(100);
-
-                entity.Property(b => b.Discription)
-                      .HasMaxLength(500);
-
-            });
-            modelBuilder.Entity<Product>()
-                    .HasOne(p => p.Brand)
-                    .WithMany(b => b.Products)
-                    .HasForeignKey(p => p.BrandId)
-                    .OnDelete(DeleteBehavior.Restrict);
 
             // User configuration
             modelBuilder.Entity<User>(entity =>

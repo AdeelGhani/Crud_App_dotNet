@@ -10,9 +10,8 @@ namespace Crud_App_dotNetApplication.Interfaces
 {
     public interface IUnitOfWork
     {
-        IGenericRepository<Product> Products { get; }
-        IGenericRepository<Category> Categories { get; }
-        IGenericRepository<Brand> Brands { get; }
+        IGenericRepository<JournalDetail> JournalDetails { get; }
+        IGenericRepository<Journal> Journal { get; }
         IGenericRepository<User> Users { get; }
         Task<int> SaveChangesAsync();
     }
