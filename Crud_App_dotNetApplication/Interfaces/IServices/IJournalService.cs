@@ -8,7 +8,7 @@ namespace Crud_App_dotNetApplication.Interfaces.IServices
     {
         Task<JournalDTO> AddJournalAsync(JournalDTO journalDto);
 
-        Task<IEnumerable<JournalDTO>> GetAllJournalsAsync();
+        Task<List<JournalDTO>> GetAllJournalsAsync();
 
         Task<JournalDTO> GetJournalByIdAsync(int id);
 

@@ -20,7 +20,9 @@ namespace Crud_App_dotNetApplication.Services
 
         private IGenericRepository<JournalDetail> _journalDetail;
         //this is Brand Field
+
         private IGenericRepository<Journal> _journal;
+        private IGenericRepository<Employee> _employee;
         private IGenericRepository<User> _user;
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -29,6 +31,8 @@ namespace Crud_App_dotNetApplication.Services
          public IGenericRepository<JournalDetail> JournalDetails => _journalDetail ??= new GenericRepository<JournalDetail>(_context);
         public IGenericRepository<Journal> Journal => _journal ??= new GenericRepository<Journal>(_context);
         public IGenericRepository<User> Users => _user ??= new GenericRepository<User>(_context);
+        public IGenericRepository<Employee> Employee => _employee ??= new GenericRepository<Employee>(_context);
+
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

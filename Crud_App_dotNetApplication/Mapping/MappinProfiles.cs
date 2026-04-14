@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-
+using Crud_App_dotNetApplication.DTOs.EmployeeDTOs;
 using Crud_App_dotNetCore.Entities;
 
 namespace Crud_App_dotNetApplication.Mapping
@@ -14,8 +14,8 @@ namespace Crud_App_dotNetApplication.Mapping
         public MappinProfiles()
         {
             CreateMap<Journal, JournalDTO>().ReverseMap();
-
             CreateMap<JournalDetail, JournalDetailDTO>().ReverseMap();
+            CreateMap<Employee, EmployeeDTO>().ReverseMap();
         }
     }
 }

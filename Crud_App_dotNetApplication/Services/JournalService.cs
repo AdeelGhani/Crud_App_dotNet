@@ -37,10 +37,10 @@ namespace Crud_App_dotNetApplication.Services
             return _mapper.Map<JournalDTO>(journal);
         }
 
-        public async Task<IEnumerable<JournalDTO>> GetAllJournalsAsync()
+        public async Task<List<JournalDTO>> GetAllJournalsAsync()
         {
-            var journals = await _unitOfWork.Journal.GetAllAsync();
-            return _mapper.Map<IEnumerable<JournalDTO>>(journals);
+            var journals = await _unitOfWork.Journal.IgnoreQueryFilters();
+            return _mapper.Map<List<JournalDTO>>(journals);
         }
 
         public async Task<JournalDTO> GetJournalByIdAsync(int id)

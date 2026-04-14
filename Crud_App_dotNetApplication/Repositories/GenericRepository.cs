@@ -27,7 +27,7 @@ namespace Crud_App_dotNetApplication.Repositories
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<List<T>> IgnoreQueryFilters()
         {
             return await _dbSet.ToListAsync();
         }

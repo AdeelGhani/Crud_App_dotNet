@@ -126,7 +126,8 @@ namespace Crud_App_dotNetApplication.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Role, user.Role),
+                new Claim("appUserID", user.Id.ToString())
             };
 
             var jwtKey = _configuration["Jwt:Key"] ?? "dev_secret_key_change_me";
@@ -150,7 +151,8 @@ namespace Crud_App_dotNetApplication.Services
                 Token = tokenString,
                 Username = user.Username,
                 Role = user.Role,
-                EmailConfirmed = user.EmailConfirmed
+                EmailConfirmed = user.EmailConfirmed,
+                AppUserId = user.Id
             };
         }
 

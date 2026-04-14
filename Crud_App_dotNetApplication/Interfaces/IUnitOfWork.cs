@@ -12,6 +12,7 @@ namespace Crud_App_dotNetApplication.Interfaces
     {
         IGenericRepository<JournalDetail> JournalDetails { get; }
         IGenericRepository<Journal> Journal { get; }
+        IGenericRepository<Employee> Employee { get; }
         IGenericRepository<User> Users { get; }
         Task<int> SaveChangesAsync();
     }

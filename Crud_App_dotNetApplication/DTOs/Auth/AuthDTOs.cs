@@ -20,6 +20,7 @@ namespace Crud_App_dotNetApplication.DTOs.Auth
         public string Username { get; set; }
         public string Role { get; set; }
         public bool EmailConfirmed { get; set; }
+        public int AppUserId { get; set; }
     }
 
     public class ResetPasswordDTO

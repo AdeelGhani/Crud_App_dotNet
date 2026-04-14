@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Crud_App_dotNetCore.Interfaces.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +49,11 @@ builder.Services.AddAutoMapper(typeof(MappinProfiles));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IJournalService, JournalService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+// Important to Understand this Below Line
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
 builder.Services.AddCors(options =>
 {
